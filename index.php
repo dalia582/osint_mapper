@@ -1,6 +1,6 @@
 <?php
 
-// index.php - منصة OSINT متكاملة (Version 6.0 - مع كل الإضافات)
+// index.php - منصة OSINT متكاملة (Version 6.0 - MacOS Dock Style)
 
 // ============================================
 // 1. دوال جلب البيانات
@@ -199,6 +199,8 @@ $randomTip = $tips[array_rand($tips)];
 <head>
     <meta charset="UTF-8">
     <title>OSINT Infrastructure Mapper Pro</title>
+    <!-- Font Awesome 6 (للأيقونات) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -206,6 +208,7 @@ $randomTip = $tips[array_rand($tips)];
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             color: #e2e8f0;
             padding: 20px;
+            padding-bottom: 100px; /* مساحة للـ Dock */
             transition: all 0.3s ease;
         }
         /* وضع النهار */
@@ -225,11 +228,6 @@ $randomTip = $tips[array_rand($tips)];
         }
         body.light-mode .badge {
             background: #f1f5f9;
-        }
-        body.light-mode .nav-btn {
-            background: #f1f5f9;
-            border-color: #0891b2;
-            color: #0891b2;
         }
         body.light-mode .risk-low { background: #dcfce7; color: #166534; }
         body.light-mode .risk-medium { background: #fef3c7; color: #92400e; }
@@ -310,43 +308,121 @@ $randomTip = $tips[array_rand($tips)];
         .btn-print { background: #ef4444; }
         .btn-export { background: #8b5cf6; }
         .btn-pdf { background: #dc2626; }
-        .nav-btn {
-            background: #1e293b;
-            border: 1px solid #00ffff;
-            border-radius: 40px;
-            padding: 10px 25px;
-            text-decoration: none;
-            color: #00ffff;
-            display: inline-flex;
+
+        /* ===== MacOS Dock Style ===== */
+        .mac-dock {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 12px;
+            background: rgba(30, 30, 40, 0.85);
+            backdrop-filter: blur(20px);
+            padding: 12px 20px;
+            border-radius: 50px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            z-index: 1000;
+        }
+
+        body.light-mode .mac-dock {
+            background: rgba(255, 255, 255, 0.85);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .dock-icon {
+            position: relative;
+            transition: all 0.2s ease;
+        }
+
+        .dock-icon a, .dock-icon button {
+            display: flex;
+            justify-content: center;
             align-items: center;
-            gap: 8px;
-            transition: 0.3s;
+            width: 50px;
+            height: 50px;
+            border-radius: 30px;
+            background: rgba(255, 255, 255, 0.15);
+            color: white;
+            font-size: 24px;
+            text-decoration: none;
+            border: none;
             cursor: pointer;
+            transition: all 0.2s ease;
         }
-        .nav-btn:hover {
-            background: #00ffff20;
-            transform: translateY(-2px);
+
+        body.light-mode .dock-icon a,
+        body.light-mode .dock-icon button {
+            background: rgba(0, 0, 0, 0.08);
+            color: #1e293b;
         }
-        .nav-btn-danger {
-            border-color: #ef4444;
-            color: #fca5a5;
+
+        /* تأثير الـ Hover (زيادة الحجم + تحريك للأعلى) */
+        .dock-icon:hover {
+            transform: translateY(-8px) scale(1.3);
         }
-        .nav-btn-danger:hover {
-            background: #ef444420;
+
+        .dock-icon:hover a,
+        .dock-icon:hover button {
+            background: #0891b2;
+            color: white;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
         }
-        .map-btn {
-            border-color: #3b82f6;
-            color: #60a5fa;
+        /* التولتيب (tooltip) */
+        .tooltip {
+            position: absolute;
+            bottom: 70px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s;
+            font-weight: normal;
         }
-        .map-btn:hover {
-            background: #3b82f620;
+
+        .dock-icon:hover .tooltip {
+            opacity: 1;
         }
+
+        /* للأجهزة الصغيرة (جوال) */
+        @media (max-width: 768px) {
+            .mac-dock {
+                gap: 6px;
+                padding: 8px 12px;
+                bottom: 10px;
+            }
+            .dock-icon a, .dock-icon button {
+                width: 40px;
+                height: 40px;
+                font-size: 18px;
+            }
+            .dock-icon:hover {
+                transform: translateY(-5px) scale(1.2);
+            }
+            .tooltip {
+                bottom: 55px;
+                font-size: 10px;
+                padding: 4px 8px;
+            }
+            body {
+                padding-bottom: 80px;
+            }
+        }
+
         @media print {
             body { background: white; padding: 0; }
             .box { background: white; color: black; border: 1px solid #ddd; }
             .title { color: #0891b2; }
             .btn-group { display: none; }
-            .nav-buttons { display: none; }
+            .mac-dock { display: none; }
             button { display: none; }
             canvas { background: white; border: 1px solid #ddd; }
         }
@@ -356,49 +432,75 @@ $randomTip = $tips[array_rand($tips)];
 </head>
 <body>
 <div class="container">
-<a href="dashboard.php" class="nav-btn" style="border-color: #8b5cf6; color: #c4b5fd;">📊 Dashboard</a>
-<a href="compare.php" class="nav-btn" style="border-color: #f97316; color: #fdba74;">🔍 مقارنة</a>
-<a href="about.php" class="nav-btn" style="border-color: #22c55e; color: #86efac;">ℹ️ عن</a>
-<a href="clear-data.php" class="nav-btn nav-btn-danger">🗑️ مسح</a>
-    <!-- ========== أزرار التنقل ========== -->
-    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 20px;">
-        
-        <!-- زر الصفحة الرئيسية -->
-        <a href="?" class="nav-btn">
-            🏠 الصفحة الرئيسية
-        </a>
-        
-        <!-- زر الوضع (ليل/نهار) -->
-        <button onclick="toggleTheme()" class="nav-btn" style="border-color: #8b5cf6; color: #c4b5fd;">
-            🌙/☀️ الوضع
-        </button>
-        
-        <!-- أزرار إضافية (تظهر فقط عند وجود IP) -->
-        <?php if (!empty($ip) && !empty($data)): ?>
-        <div style="display: flex; gap: 10px;">
-            <!-- زر الخريطة -->
-            <?php if ($data['lat'] != 0 && $data['lon'] != 0): ?>
-            <a href="https://www.google.com/maps?q=<?php echo $data['lat']; ?>,<?php echo $data['lon']; ?>" 
-               target="_blank"
-               class="nav-btn map-btn">
-                🗺️ Google Maps
-            </a>
-            <?php endif; ?>
-            <a href="?" class="nav-btn nav-btn-danger">
-                ✖️ مسح البحث
-            </a>
-            <a href="#" onclick="window.scrollTo({top: 0, behavior: 'smooth'}); return false;" class="nav-btn">
-                ⬆️ أعلى الصفحة
+
+    <!-- ========== MacOS Dock Style Navbar ========== -->
+    <div class="mac-dock">
+        <div class="dock-icon">
+            <a href="?">
+                <i class="fas fa-home"></i>
+                <span class="tooltip">الرئيسية</span>
             </a>
         </div>
+        <div class="dock-icon">
+            <a href="dashboard.php">
+                <i class="fas fa-chart-line"></i>
+                <span class="tooltip">Dashboard</span>
+            </a>
+        </div>
+        <div class="dock-icon">
+            <a href="compare.php">
+                <i class="fas fa-code-branch"></i>
+                <span class="tooltip">مقارنة</span>
+            </a>
+        </div>
+        <div class="dock-icon">
+            <a href="about.php">
+                <i class="fas fa-info-circle"></i>
+                <span class="tooltip">عن</span>
+            </a>
+        </div>
+        <div class="dock-icon">
+            <a href="clear-data.php" onclick="return confirm('⚠️ هل أنت متأكدة؟')">
+                <i class="fas fa-trash-alt"></i>
+                <span class="tooltip">مسح</span>
+            </a>
+        </div>
+        <div class="dock-icon">
+            <button onclick="toggleTheme()" class="theme-btn">
+                <i class="fas fa-moon"></i>
+                <span class="tooltip">الوضع</span>
+            </button>
+        </div>
+        <div class="dock-icon">
+            <a href="?reset=1" onclick="return confirm('⚠️ هل أنت متأكدة؟ هذا سيحذف كل السجل والإحصائيات نهائياً!')">
+                <i class="fas fa-sync-alt"></i>
+                <span class="tooltip">إعادة ضبط</span>
+            </a>
+        </div>
+        <?php if (!empty($ip) && !empty($data)): ?>
+            <?php if ($data['lat'] != 0 && $data['lon'] != 0): ?>
+            <div class="dock-icon">
+                <a href="https://www.google.com/maps?q=<?php echo $data['lat']; ?>,<?php echo $data['lon']; ?>" target="_blank">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span class="tooltip">خرائط</span>
+                </a>
+            </div>
+            <?php endif; ?>
+            <div class="dock-icon">
+                <a href="?">
+                    <i class="fas fa-times-circle"></i>
+                    <span class="tooltip">مسح البحث</span>
+                </a>
+            </div>
+            <div class="dock-icon">
+                <button onclick="window.scrollTo({top: 0, behavior: 'smooth'});">
+                    <i class="fas fa-arrow-up"></i>
+                    <span class="tooltip">أعلى</span>
+                </button>
+            </div>
         <?php endif; ?>
-        
-        <!-- زر إعادة ضبط التطبيق -->
-        <a href="?reset=1" class="nav-btn nav-btn-danger" onclick="return confirm('⚠️ هل أنت متأكدة؟ هذا سيحذف كل السجل والإحصائيات نهائياً!')">
-            🔄 إعادة ضبط التطبيق
-        </a>
     </div>
-    
+
     <!-- رسالة إعادة الضبط -->
     <?php if (isset($reset_msg)): ?>
     <div class="box" style="background: #065f46; text-align: center; border-color: #22c55e;">
@@ -457,6 +559,7 @@ $randomTip = $tips[array_rand($tips)];
         <div class="info"><span>🖥️ Reverse DNS</span><span><?php echo $dns['ptr']; ?></span></div>
         <?php endif; ?>
     </div>
+
     <!-- ========== زر فتح الخريطة الحقيقية (Google Maps) ========== -->
     <?php if ($data['lat'] != 0 && $data['lon'] != 0): ?>
     <div class="box" style="text-align: center;">
@@ -525,8 +628,9 @@ $randomTip = $tips[array_rand($tips)];
         </div>
     </div>
     <?php endif; ?>
+
     <!-- ========== سجل البحث مع زر الحذف ========== -->
-    <div class="box">
+     <div class="box">
         <h2 style="color: #00ffff; margin-bottom: 15px;">📜 سجل البحث</h2>
         <div style="display: flex; flex-wrap: wrap; gap: 10px; max-height: 200px; overflow-y: auto;">
             <?php foreach (array_reverse($history) as $h): ?>
@@ -549,7 +653,6 @@ $randomTip = $tips[array_rand($tips)];
         <div class="info"><span>🕐 آخر بحث</span><span><?php echo $stats['last_search'] ?? 'لا يوجد'; ?></span></div>
     </div>
 
-    
     <!-- ========== رسم Maltego Graph ========== -->
     <div class="box">
         <h2 style="color: #00ffff; text-align: center; margin-bottom: 15px;">🕸️ Maltego Graph - خريطة البنية التحتية</h2>
@@ -615,7 +718,6 @@ $randomTip = $tips[array_rand($tips)];
     }
 
     var main = nodes[0];
-
     for(var i=1; i<nodes.length; i++) {
         var to = nodes[i];
         ctx.beginPath();
@@ -654,7 +756,7 @@ $randomTip = $tips[array_rand($tips)];
     }
 })();
 
-// ========== 3. دوال التحكم ==========
+// ========== 2. دوال التحكم ==========
 function copyResults() {
     var text = '';
     text += '🔍 تقرير OSINT للـ IP: <?php echo addslashes($ip); ?>\n';
@@ -716,12 +818,25 @@ function exportToPDF() {
 
 function toggleTheme() {
     document.body.classList.toggle('light-mode');
+    var themeIcon = document.querySelector('.theme-btn i');
+    if (document.body.classList.contains('light-mode')) {
+        themeIcon.classList.remove('fa-moon');
+        themeIcon.classList.add('fa-sun');
+    } else {
+        themeIcon.classList.remove('fa-sun');
+        themeIcon.classList.add('fa-moon');
+    }
     localStorage.setItem('theme', document.body.classList.contains('light-mode') ? 'light' : 'dark');
 }
 
 // تحميل الثيم المحفوظ
 if (localStorage.getItem('theme') === 'light') {
     document.body.classList.add('light-mode');
+    var themeIcon = document.querySelector('.theme-btn i');
+    if (themeIcon) {
+        themeIcon.classList.remove('fa-moon');
+        themeIcon.classList.add('fa-sun');
+    }
 }
 
 // إشعار عند انتهاء البحث
@@ -740,3 +855,4 @@ if (Notification.permission === 'granted') {
 
 </body>
 </html>
+

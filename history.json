@@ -22,5 +22,13 @@
         "proxy": false,
         "first_seen": "2026-04-26 18:34:36",
         "last_seen": "2026-04-26 18:34:36"
+    },
+    {
+        "ip": "8.8.8.8",
+        "country": "United States",
+        "hosting": true,
+        "proxy": false,
+        "first_seen": "2026-05-01 15:42:52",
+        "last_seen": "2026-05-01 15:42:52"
     }
 ]
