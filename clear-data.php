@@ -1,43 +1,40 @@
 <?php
-// clear-data.php - مسح البيانات المؤقتة
-
-if (isset($_GET['confirm']) && $_GET['confirm'] == 'yes') {
-    if (file_exists('history.json')) unlink('history.json');
-    if (file_exists('stats.json')) unlink('stats.json');
-    
-    // مسح ملفات الكاش
-    array_map('unlink', glob('cache_*.json'));
-    
-    $message = "✅ تم مسح جميع البيانات بنجاح";
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['confirm'])) {
+    $files = ['history.json', 'stats.json'];
+    $cleared = [];
+    foreach ($files as $f) {
+        if (file_exists($f)) {
+            file_put_contents($f, '[]');
+            $cleared[] = $f;
+        }
+    }
+    header('Location: index.php');
+    exit;
 }
 ?>
 <!DOCTYPE html>
-<html dir="rtl">
+<html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <title>مسح البيانات - OSINT</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+<meta charset="UTF-8">
+<title>Clear Data — OSINT Mapper</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+body{background:#050a14;color:#e2e8f0;font-family:'JetBrains Mono',monospace;display:flex;align-items:center;justify-content:center;min-height:100vh;padding:20px;}
+.box{background:#0d1f3c;border:1px solid #1a3a5c;border-radius:16px;padding:32px;max-width:400px;text-align:center;}
+h2{color:#ef4444;margin-bottom:12px;font-size:20px;}
+p{color:#64748b;font-size:13px;margin-bottom:24px;line-height:1.6;}
+.btn-confirm{padding:12px 24px;background:#ef4444;border:none;border-radius:10px;color:#fff;font-family:'JetBrains Mono',monospace;font-size:13px;cursor:pointer;margin-right:8px;}
+.btn-cancel{padding:12px 24px;background:rgba(100,116,139,.2);border:1px solid #1a3a5c;border-radius:10px;color:#94a3b8;font-family:'JetBrains Mono',monospace;font-size:13px;cursor:pointer;text-decoration:none;display:inline-block;}
+</style>
 </head>
-<body class="bg-gray-900 text-white p-6">
-<div class="container mx-auto max-w-md">
-
-    <div class="bg-gray-800 p-8 rounded-xl text-center">
-        <span class="text-6xl">🗑️</span>
-        <h1 class="text-2xl text-cyan-400 mt-3">مسح البيانات</h1>
-        
-        <?php if (isset($message)): ?>
-            <div class="bg-green-600 p-4 rounded-xl mt-6"><?php echo $message; ?></div>
-            <a href="index.php" class="block mt-6 bg-cyan-600 px-6 py-3 rounded-xl hover:bg-cyan-500">🏠 العودة للرئيسية</a>
-        <?php else: ?>
-            <p class="text-gray-400 mt-4">هل أنت متأكدة من مسح كل البيانات؟</p>
-            <p class="text-sm text-gray-500 mt-2">(سجل البحث + الإحصائيات)</p>
-            <div class="flex gap-4 mt-6">
-                <a href="?confirm=yes" class="flex-1 bg-red-600 px-4 py-2 rounded-xl hover:bg-red-500">نعم، امسحي</a>
-                <a href="index.php" class="flex-1 bg-gray-700 px-4 py-2 rounded-xl hover:bg-gray-600">لا، عودي</a>
-            </div>
-        <?php endif; ?>
-    </div>
-
+<body>
+<div class="box">
+  <h2>⚠️ Effacer les données</h2>
+  <p>Cette action va effacer l'historique des investigations et les statistiques. Cette action est irréversible.</p>
+  <form method="POST">
+    <button class="btn-confirm" type="submit" name="confirm" value="1">🗑 Confirmer</button>
+    <a class="btn-cancel" href="index.php">Annuler</a>
+  </form>
 </div>
 </body>
 </html>

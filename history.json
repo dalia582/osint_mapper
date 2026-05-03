@@ -1,34 +1,18 @@
 [
     {
-        "ip": "1.1.1.1",
-        "country": "Australia",
-        "hosting": true,
-        "proxy": false,
-        "first_seen": "2026-04-25 00:44:21",
-        "last_seen": "2026-04-25 00:44:21"
+        "ip": "9.9.9.9",
+        "country": "United States",
+        "threat_score": 28,
+        "threat_level": "MEDIUM",
+        "first_seen": "2026-05-03 12:45:54",
+        "last_seen": "2026-05-03 12:45:54"
     },
     {
         "ip": "151.101.1.69",
         "country": "Canada",
-        "hosting": true,
-        "proxy": false,
-        "first_seen": "2026-04-25 19:30:59",
-        "last_seen": "2026-04-25 19:30:59"
-    },
-    {
-        "ip": "8.8.4.4",
-        "country": "United States",
-        "hosting": true,
-        "proxy": false,
-        "first_seen": "2026-04-26 18:34:36",
-        "last_seen": "2026-04-26 18:34:36"
-    },
-    {
-        "ip": "8.8.8.8",
-        "country": "United States",
-        "hosting": true,
-        "proxy": false,
-        "first_seen": "2026-05-01 15:42:52",
-        "last_seen": "2026-05-01 15:42:52"
+        "threat_score": 73,
+        "threat_level": "CRITICAL",
+        "first_seen": "2026-05-03 12:32:24",
+        "last_seen": "2026-05-03 12:32:24"
     }
 ]
